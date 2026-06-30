@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get started — Cornell Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --black:#08090C;--ink:#14161D;--gray-700:#43475A;--gray-500:#767A8C;--gray-300:#C5C7D2;
+    --gray-100:#EFF0F4;--off:#F7F8FA;--paper:#FFFFFF;
+    --blue:#0169f0;--blue-soft:#E5EFFE;
+    --ease:cubic-bezier(.19,1,.22,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--off);-webkit-font-smoothing:antialiased;line-height:1.6;}
+  .wrap{max-width:640px;margin:0 auto;padding:0 24px;}
+  .top{padding:34px 0;}
+  .logo{font-weight:600;font-size:19px;color:var(--black);}
+  .hero{padding:10px 0 36px;}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:16px;}
+  .kicker::before{content:"";width:20px;height:1.5px;background:var(--blue);}
+  h1{font-size:clamp(28px,4vw,38px);font-weight:700;letter-spacing:-0.025em;line-height:1.12;margin-bottom:14px;}
+  .sub{font-size:16px;color:var(--gray-700);max-width:520px;}
+
+  .card{background:var(--paper);border:1px solid var(--gray-100);border-radius:20px;padding:38px;margin-bottom:60px;box-shadow:0 30px 60px -40px rgba(8,9,12,.15);}
+  .step-label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--gray-500);margin-bottom:6px;}
+  .field{margin-bottom:24px;}
+  .field label{display:block;font-size:14px;font-weight:600;margin-bottom:7px;}
+  .field .hint{font-size:12.5px;color:var(--gray-500);margin-top:5px;}
+  input, textarea{
+    width:100%;border:1px solid var(--gray-300);border-radius:10px;padding:12px 14px;
+    font-family:inherit;font-size:15px;color:var(--ink);background:var(--paper);
+    transition:border-color .2s var(--ease);
+  }
+  input:focus, textarea:focus{outline:none;border-color:var(--blue);}
+  textarea{resize:vertical;min-height:90px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  .submit-btn{
+    width:100%;background:var(--black);color:#fff;border:none;border-radius:100px;
+    padding:15px 24px;font-family:inherit;font-size:15.5px;font-weight:600;cursor:pointer;
+    transition:background .25s var(--ease), transform .25s var(--ease);
+  }
+  .submit-btn:hover:not(:disabled){background:var(--blue);transform:translateY(-1px);}
+  .submit-btn:disabled{opacity:.5;cursor:default;}
+
+  .status{margin-top:16px;font-size:14px;text-align:center;}
+  .status.err{color:#D44;}
+  .status.ok{color:#1a9e5c;}
+
+  .success{display:none;text-align:center;padding:60px 38px;}
+  .success.show{display:block;}
+  .success .check{width:56px;height:56px;border-radius:50%;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
+  .success h2{font-size:24px;font-weight:700;margin-bottom:10px;}
+  .success p{color:var(--gray-700);font-size:15px;}
+
+  footer{padding:30px 0 50px;text-align:center;font-size:13px;color:var(--gray-500);}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap"><span class="logo">CornellSolutions</span></div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">Welcome aboard</div>
+    <h1>Let's get your campaign built.</h1>
+    <p class="sub">A few details about your business and who you sell to — this is what lets us write outbound that actually sounds like you, not a template. Takes about 5 minutes.</p>
+  </div>
+
+  <form class="card" id="onboardForm">
+    <div class="step-label">Your business</div>
+
+    <div class="field">
+      <label for="business_name">Business name</label>
+      <input type="text" id="business_name" required placeholder="e.g. Northbound Studio">
+    </div>
+
+    <div class="field">
+      <label for="website">Website</label>
+      <input type="url" id="website" placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label for="business_description">What do you do, in your own words?</label>
+      <textarea id="business_description" required placeholder="A sentence or two — what you sell, who you typically serve, what makes you different."></textarea>
+      <div class="hint">This is the single most important field. The more specific, the better your outbound will sound.</div>
+    </div>
+
+    <div class="step-label" style="margin-top:8px;">Who you're trying to reach</div>
+
+    <div class="field">
+      <label for="icp_description">Describe your ideal customer</label>
+      <textarea id="icp_description" required placeholder="Industry, company size, role/title of the decision-maker, geography if it matters."></textarea>
+    </div>
+
+    <div class="step-label" style="margin-top:8px;">Your contact info</div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="contact_name">Your name</label>
+        <input type="text" id="contact_name" required>
+      </div>
+      <div class="field">
+        <label for="contact_email">Email</label>
+        <input type="email" id="contact_email" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="contact_phone">Phone (for the warm voice agent, if applicable)</label>
+      <input type="tel" id="contact_phone">
+    </div>
+
+    <div class="field">
+      <label for="voice_agent_name">Pick a name for your AI voice agent</label>
+      <input type="text" id="voice_agent_name" placeholder="e.g. Maya, Alex, Jordan">
+      <div class="hint">This is who prospects hear when they get a warm callback. Pick something that fits your brand.</div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Submit details</button>
+    <div class="status" id="statusMsg"></div>
+  </form>
+
+  <div class="card success" id="successCard">
+    <div class="check">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-9" stroke="#0169f0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>You're all set.</h2>
+    <p>We're drafting your campaign now. Owen will review it personally before anything goes live — you'll hear from us within 1 business day.</p>
+  </div>
+</div>
+
+<footer>Cornell Solutions · hello@cornellsolutions.co</footer>
+
+<script>
+  // ============================================================
+  // SETUP REQUIRED: paste your Supabase project URL + anon key below.
+  // Same values already used in the dashboard (seb-dashboard/src/supabaseClient.js)
+  // ============================================================
+  const SUPABASE_URL = 'https://fxyyvzclvjsdniyqusjp.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4eXl2emNsdmpzZG5peXF1c2pwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NzUyMTIsImV4cCI6MjA5NzM1MTIxMn0.Gdg_3sKhbbIlNnhwzRLPkNZN8IrFwI6f2LXuL7jIvtY';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Read the client token from the URL — e.g. yoursite.com/onboard.html?token=abc123
+  // This token is generated when the client row is created (right after Stripe payment)
+  // and is what ties this form submission back to the correct client record.
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  const form = document.getElementById('onboardForm');
+  const statusMsg = document.getElementById('statusMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  const successCard = document.getElementById('successCard');
+
+  if (!token) {
+    statusMsg.textContent = 'This link is missing a required code — please use the link from your confirmation email.';
+    statusMsg.className = 'status err';
+    submitBtn.disabled = true;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+    statusMsg.textContent = '';
+    statusMsg.className = 'status';
+
+    const payload = {
+      business_name: document.getElementById('business_name').value.trim(),
+      website: document.getElementById('website').value.trim() || null,
+      business_description: document.getElementById('business_description').value.trim(),
+      icp_description: document.getElementById('icp_description').value.trim(),
+      contact_name: document.getElementById('contact_name').value.trim(),
+      contact_email: document.getElementById('contact_email').value.trim(),
+      contact_phone: document.getElementById('contact_phone').value.trim() || null,
+      voice_agent_name: document.getElementById('voice_agent_name').value.trim() || null,
+      onboarding_status: 'questionnaire_done',
+    };
+
+    const { error } = await supabase
+      .from('clients')
+      .update(payload)
+      .eq('questionnaire_token', token);
+
+    if (error) {
+      statusMsg.textContent = 'Something went wrong submitting this — please try again, or email hello@cornellsolutions.co.';
+      statusMsg.className = 'status err';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit details';
+      return;
+    }
+
+    form.style.display = 'none';
+    successCard.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
